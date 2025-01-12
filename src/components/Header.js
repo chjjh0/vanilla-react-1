@@ -1,12 +1,28 @@
-export const Header = () => {
-  return `
+import { h } from "@/libs/h";
+import { Link } from "@/router/router";
+
+const Header = () => {
+  return (
     <header>
-      <h1>사이트 제목</h1>
       <nav>
-        <a href="/">홈</a>
-        <a href="/about">소개</a>
-        <a href="/contact">연락처</a>
+        <ul>
+          <li>
+            {/* <a href="/">Home</a> */}
+            <Link href="/">Home</Link>
+          </li>
+          <li>
+            <Link href="/about">About</Link>
+          </li>
+          <li>
+            <Link href="/contact">Contact</Link>
+          </li>
+          <li>
+            <Link href="/counter">Counter</Link>
+          </li>
+        </ul>
       </nav>
     </header>
-  `;
+  );
 };
+
+export default Header;

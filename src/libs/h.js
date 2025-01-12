@@ -6,25 +6,30 @@
  * @returns {Node} 생성된 DOM 요소
  */
 export function h(type, props, ...children) {
+  // console.log("h ~ type: ", type, typeof type, props, children);
   // Fragment 처리
   if (type === Fragment) {
-    return createElement(type, { children }); // Fragment에 children 전달
+    return createJSXElement(type, { children }); // Fragment에 children 전달
   }
 
+  // 함수형 컴포넌트 처리
   if (typeof type === "function") {
-    return type(props); // 함수형 컴포넌트 호출
+    // console.log("h ~ type: 함수형처리 시작", children, type);
+    const propsTemp = { ...props, children };
+    return type(propsTemp); // 함수형 컴포넌트 호출(type에 createJSXElement 함수가 있어서 이를 호출)
   }
 
-  return createElement(type, { ...props, children }); // 일반 요소 처리
+  return createJSXElement(type, { ...props, children }); // 일반 요소 처리
 }
 
 /**
- * createElement 함수는 주어진 타입과 속성으로 DOM 요소를 생성합니다.
+ * createJSXElement 함수는 주어진 타입과 속성으로 DOM 요소를 생성합니다.
  * @param {string} type - 생성할 요소의 타입 (HTML 태그 이름)
  * @param {object} props - 요소에 적용할 속성
  * @returns {Node} 생성된 DOM 요소
  */
-function createElement(type, props) {
+function createJSXElement(type, props) {
+  // console.log("createJSXElement 시작 ", type, props);
   let element;
 
   if (type === Fragment) {
@@ -34,6 +39,7 @@ function createElement(type, props) {
   }
 
   if (props) {
+    // console.log("createJSXElement ~ props: ", props);
     Object.keys(props).forEach((key) => {
       if (key === "children") {
         // 자식 요소가 배열인 경우 평탄화
@@ -75,6 +81,5 @@ export const Fragment = (props) => {
     const childArray = Array.isArray(children) ? children : [children];
     childArray.forEach((child) => fragment.appendChild(child));
   }
-
   return fragment;
 };
